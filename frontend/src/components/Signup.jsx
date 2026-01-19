@@ -1,6 +1,6 @@
 const Signup = () => {
   return (
-    <div className="min-h-screen w-full bg-blue-50 flex items-center justify-center p-6">
+    <div className="min-h-screen w-full bg-blue-50 flex items-center justify-center p-6 caret-transparent">
       <div className="w-full max-w-5xl overflow-hidden rounded-2xl]">
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* LEFT PANEL */}
@@ -40,7 +40,7 @@ const Signup = () => {
 
                 <button
                   type="button"
-                  className="w-full mt-2 rounded-xl bg-blue-500 py-3 text-sm font-semibold tracking-wide text-white shadow-lg transition hover:-translate-y-0.5"
+                  className="w-full mt-2 rounded-xl bg-blue-500 py-3 text-sm font-semibold cursor-pointer tracking-wide text-white shadow-lg transition hover:-translate-y-0.5"
                 >
                   CREATE AN ACCOUNT
                 </button>
