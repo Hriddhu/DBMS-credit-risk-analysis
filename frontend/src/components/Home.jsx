@@ -27,8 +27,8 @@ const Home = () => {
           </div>
 
           <div className="relative hidden md:block h-[420px]">
-            <div className="absolute right-24 top-16 h-64 w-64 rotate-12 rounded-[40px] bg-blue-100 shadow-lg" />
-            <div className="absolute right-12 top-8 h-64 w-64 -rotate-6 rounded-[40px] bg-blue-200 shadow-xl" />
+            <div className="absolute right-24 top-16 h-64 w-64 rotate-12 rounded-[40px] bg-blue-500 shadow-lg" />
+            <div className="absolute right-12 top-8 h-64 w-64 -rotate-6 rounded-[40px] bg-blue-300 shadow-xl" />
           </div>
         </div>
 

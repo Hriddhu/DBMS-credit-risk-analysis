@@ -7,19 +7,24 @@ export default function Navbar() {
         <div className="flex items-center">
           {/* Left group: Logo + links */}
           <div className="flex items-center gap-8 text-sm">
-            <Link to="/" className="text-2xl font-semibold text-blue-900">
+            <Link
+              to="/"
+              className="text-3xl font-bold text-blue-800 leading-none"
+            >
               CreditScore
             </Link>
 
             <NavLink
               to="/dashboard"
               className={({ isActive }) =>
-                isActive
-                  ? "text-blue-600 font-medium"
-                  : "text-gray-600 hover:text-gray-900 transition"
+                `inline-flex items-center ${
+                  isActive
+                    ? "text-blue-600 font"
+                    : "text-gray-600 hover:text-gray-900 transition"
+                }`
               }
             >
-              Dashboard
+              <span className="text-gray-900 ">Dashboard</span>
             </NavLink>
           </div>
 
@@ -27,7 +32,7 @@ export default function Navbar() {
           <div className="ml-auto flex items-center gap-4 text-sm">
             <Link
               to="/login"
-              className="text-gray-700 hover:text-gray-900 transition"
+              className="inline-flex items-center text-gray-700 hover:text-gray-900 transition"
             >
               Log in
             </Link>
