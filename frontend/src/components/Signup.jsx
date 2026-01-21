@@ -1,3 +1,5 @@
+import { Link, NavLink } from "react-router-dom";
+
 const Signup = () => {
   return (
     <div className="min-h-screen w-full bg-blue-50 flex items-center justify-center p-6 caret-transparent">
@@ -9,6 +11,10 @@ const Signup = () => {
             <h1 className="mt-2 text-3xl font-extrabold tracking-widest text-gray-900">
               CreditScore
             </h1>
+            <div className="relative hidden md:block h-[420px]">
+              <div className="absolute right-24 top-16 h-64 w-64 rotate-12 rounded-[40px] bg-blue-500 shadow-lg" />
+              <div className="absolute right-12 top-8 h-64 w-64 -rotate-6 rounded-[40px] bg-blue-300 shadow-xl" />
+            </div>
           </div>
 
           {/* RIGHT PANEL */}
@@ -46,9 +52,12 @@ const Signup = () => {
 
               <p className="mt-6 text-xs text-slate-500 text-center">
                 Already have an account?{" "}
-                <span className="text-blue-600 font-semibold cursor-pointer">
+                <Link
+                  to="/login"
+                  className="text-blue-600 font-semibold cursor-pointer"
+                >
                   Login
-                </span>
+                </Link>
               </p>
             </div>
           </div>
