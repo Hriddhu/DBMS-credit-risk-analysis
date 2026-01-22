@@ -1,5 +1,6 @@
 import { useState } from "react"; // Added for state
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   // 1. State to store credentials
@@ -9,6 +10,7 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   // 2. Handle input changes
   const handleChange = (e) => {
@@ -34,8 +36,7 @@ const Login = () => {
 
       if (response.ok) {
         alert("Login successful!");
-        // Store user info in localStorage if you want to keep them logged in
-        localStorage.setItem("username", data.username);
+        login({ token: data.token, username: data.username });
         navigate("/dashboard"); // Or wherever your credit score form is
       } else {
         alert("Login failed: " + (data.error || "Invalid credentials"));
