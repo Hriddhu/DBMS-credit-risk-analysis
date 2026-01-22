@@ -7,8 +7,10 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db import connection
 from django.contrib.auth.hashers import make_password, check_password
+
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework import status
 
 USERNAME_PATTERN = re.compile(r"^[A-Za-z0-9_]{3,30}$")
@@ -42,29 +44,43 @@ def _generate_token(username):
     }
     return jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
 
-@api_view(['POST'])
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
 def signup(request):
-    username = request.data.get('username')
-    email = request.data.get('email')
-    password = request.data.get('password')
-    hashed_pwd = make_password(password)
+    full_name = request.data.get("full_name")
+    username = request.data.get("username")
+    email = request.data.get("email")
+    password = request.data.get("password")
 
     validation_error = _validate_signup_payload(username, email, password)
     if validation_error:
         return Response({"error": validation_error}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Parameterized queries prevent SQL injection by avoiding string interpolation.
-    with connection.cursor() as cursor:
-        cursor.execute(
-            "INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)",
-            [username, email, hashed_pwd]
-        )
-    return Response({"message": "User created successfully!"}, status=201)
+    hashed_pwd = make_password(password)
 
-@api_view(['POST'])
+    with connection.cursor() as cursor:
+        # Check duplicates
+        cursor.execute("SELECT 1 FROM users WHERE username=%s OR email=%s", [username, email])
+        if cursor.fetchone():
+            return Response({"error": "Username or email already exists."}, status=status.HTTP_400_BAD_REQUEST)
+
+        cursor.execute(
+            """
+            INSERT INTO users (full_name, username, email, password_hash)
+            VALUES (%s, %s, %s, %s)
+            """,
+            [full_name or username, username, email, hashed_pwd]
+        )
+
+    return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
 def login(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
+    username = request.data.get("username")
+    password = request.data.get("password")
 
     validation_error = _validate_login_payload(username, password)
     if validation_error:
@@ -78,7 +94,7 @@ def login(request):
         token = _generate_token(username)
         return Response(
             {"message": "Login successful!", "username": username, "token": token},
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )
-    
+
     return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
