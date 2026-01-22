@@ -76,17 +76,29 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hriddu_db',
-        'USER': 'hriddu',
-        'PASSWORD': 'MyDBPass123',
+        'NAME': 'credit_score_db',
+        'USER': 'postgres',
+        'PASSWORD': os.getenv('DB_PASSWORD'), # This fetches it from .env
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
-    
 }
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "DEFAULT_PERMISSION_CLASSES": [],
+}
+
+    
+
 print("!!! SETTINGS FILE LOADED POSTGRES ENGINE !!!")
 
 

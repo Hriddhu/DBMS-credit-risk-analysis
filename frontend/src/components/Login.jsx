@@ -1,5 +1,6 @@
 import { useState } from "react"; // Added for state
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   // 1. State to store credentials
@@ -9,6 +10,7 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   // 2. Handle input changes
   const handleChange = (e) => {
@@ -34,8 +36,7 @@ const Login = () => {
 
       if (response.ok) {
         alert("Login successful!");
-        // Store user info in localStorage if you want to keep them logged in
-        localStorage.setItem("username", data.username);
+        login({ token: data.token, username: data.username });
         navigate("/dashboard"); // Or wherever your credit score form is
       } else {
         alert("Login failed: " + (data.error || "Invalid credentials"));
@@ -50,28 +51,32 @@ const Login = () => {
     <div className="min-h-screen w-full bg-blue-50 flex items-center justify-center p-6">
       <div className="w-full max-w-md bg-blue-100 rounded-2xl shadow-xl p-8 md:p-10">
         <div className="flex items-center gap-2 mb-6">
-          <span className="text-lg font-semibold text-gray-900">CreditScore</span>
+          <span className="text-lg font-semibold text-gray-900">
+            CreditScore
+          </span>
         </div>
 
-        <h2 className="text-2xl font-bold text-gray-900">Welcome to CreditScore</h2>
+        <h2 className="text-2xl font-bold text-gray-900">
+          Welcome to CreditScore
+        </h2>
         <p className="mt-1 text-sm text-gray-500">Manage your creditscore.</p>
 
         {/* 4. Added onSubmit to form */}
         <form className="mt-6 space-y-4" onSubmit={handleLogin}>
-          <Input 
+          <Input
             label="Username" // Changed label to Username to match your test_api.py test
-            type="text" 
+            type="text"
             name="username"
-            placeholder="Jenny" 
+            placeholder="Jenny"
             value={credentials.username}
             onChange={handleChange}
             required
           />
-          <Input 
-            label="Password" 
-            type="password" 
+          <Input
+            label="Password"
+            type="password"
             name="password"
-            placeholder="••••••••" 
+            placeholder="••••••••"
             value={credentials.password}
             onChange={handleChange}
             required
@@ -82,7 +87,7 @@ const Login = () => {
           </div>
 
           <div className="flex justify-center gap-4">
-             {/* Admin login can be static for now or a different route */}
+            {/* Admin login can be static for now or a different route */}
             <button
               type="button"
               className="w-full mt-2 rounded-full bg-slate-400 py-3 text-sm font-semibold tracking-wide cursor-pointer text-white shadow-lg transition hover:-translate-y-0.5"
@@ -108,7 +113,9 @@ const Login = () => {
 
         <p className="mt-6 text-xs text-gray-500 text-center">
           Don’t have an account?{" "}
-          <Link to="/Signup" className="text-blue-600 font-semibold">Create New!</Link>
+          <Link to="/Signup" className="text-blue-600 font-semibold">
+            Create New!
+          </Link>
         </p>
       </div>
     </div>
@@ -116,10 +123,20 @@ const Login = () => {
 };
 
 // 6. Updated Input component to handle value/onChange
-const Input = ({ label, type = "text", placeholder, name, value, onChange, required }) => {
+const Input = ({
+  label,
+  type = "text",
+  placeholder,
+  name,
+  value,
+  onChange,
+  required,
+}) => {
   return (
     <div className="select-text">
-      <label className="block mb-1.5 text-xs font-semibold text-gray-500">{label}</label>
+      <label className="block mb-1.5 text-xs font-semibold text-gray-500">
+        {label}
+      </label>
       <input
         type={type}
         name={name}
